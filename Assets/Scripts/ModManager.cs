@@ -166,40 +166,40 @@ public class Mod {
 		}
 
 		UIManager.AutoAddMessage("Executing " + ModManager.GetCompiler()+ " " + args);
-        compilerOutput = new List<string>();
+		compilerOutput = new List<string>();
 
-        var compileProcess = new System.Diagnostics.Process();
-        compileProcess.StartInfo.FileName = ModManager.GetCompiler();
-        compileProcess.StartInfo.Arguments = args;
+		var compileProcess = new System.Diagnostics.Process();
+		compileProcess.StartInfo.FileName = ModManager.GetCompiler();
+		compileProcess.StartInfo.Arguments = args;
 
 
-        // Set UseShellExecute to false for redirection.
-        compileProcess.StartInfo.UseShellExecute = false;
+		// Set UseShellExecute to false for redirection.
+		compileProcess.StartInfo.UseShellExecute = false;
 
-        // Redirect the standard output of the sort command.  
-        // This stream is read asynchronously using an event handler.
-        compileProcess.StartInfo.RedirectStandardOutput = true;
-        compileProcess.StartInfo.RedirectStandardError = true;
+		// Redirect the standard output of the sort command.  
+		// This stream is read asynchronously using an event handler.
+		compileProcess.StartInfo.RedirectStandardOutput = true;
+		compileProcess.StartInfo.RedirectStandardError = true;
 
-        // Set our event handler to asynchronously read the sort output.
-        compileProcess.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler(OnCompilerOutput);
-        compileProcess.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler(OnCompilerError);
+		// Set our event handler to asynchronously read the sort output.
+		compileProcess.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler(OnCompilerOutput);
+		compileProcess.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler(OnCompilerError);
 
-        // Start the process.
-        compileProcess.Start();
-        compileProcess.BeginErrorReadLine();
-        compileProcess.BeginOutputReadLine();
-        compileProcess.WaitForExit();
-        lock(compilerOutput){
-	        foreach(var line in compilerOutput){
-	        	if(string.IsNullOrEmpty(line))
-	        		return;
+		// Start the process.
+		compileProcess.Start();
+		compileProcess.BeginErrorReadLine();
+		compileProcess.BeginOutputReadLine();
+		compileProcess.WaitForExit();
+		lock(compilerOutput){
+			foreach(var line in compilerOutput){
+				if(string.IsNullOrEmpty(line))
+					return;
 
 				UIManager.Instance.AddMessage(line);
-	        }
-        }
+			}
+		}
 		UIManager.Instance.AddMessage("Compiler exited code " + compileProcess.ExitCode);    	
-  	}
+	}
 
 	public List<string> GetSources(){
 		string startPath = path + "/Sources";
